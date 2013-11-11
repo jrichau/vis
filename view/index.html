@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>We're In The Money | Jim Vallandingham</title>
-  <meta name="description" content="Visualization of movie ratings and profits">
-  <meta name="author" content="Jim Vallandingham">
+  <title>Brewspace likes | Josh Richau</title>
+  <meta name="description" content="Visualization brewspace liking behavior">
+  <meta name="author" content="Josh Richau">
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -33,18 +33,18 @@
     <div id="about-modal" class="modal hide fade">
       <div class="modal-header">
         <a href="#" class="close">&times;</a>
-        <h3>We're In The Money!</h3>
+        <h3>Who likes who?</h3>
       </div>
       <div class="modal-body">
         <h4>About</h4>
-        <p>How much does a good movie make? How about a bad one?</p>
-        <p>This visualization lets you explore the connections between movie ratings, budgets, and profits.</p>
-        <p>The <strong>x-axis</strong> shows the film's profit margin while the <strong>y-axis</strong> gives the Rotten Tomatoes review percentage (the % of critics that give a positive review to the movie). Each <strong>dot</strong> in the visualization represents a movie. Hover over the dot to get the specifics on that film.</p>
+        <p>Who likes whose stuff?</p>
+        <p>This visualization lets you explore the liking behavior in brewspace.</p>
+        <p>The <strong>x-axis</strong> shows how many likes a user gets <strong>y-axis</strong> shows how many likes they hand out. Each <strong>dot</strong> in the visualization represents a user. Hover over the dot to get the specifics on that user.</p>
         <h4>Filters</h4>
-        <p>Use the filters above to select specific Genres or Story Types.</p>
-        <p>With the controls below, specify the year to look at, and the number of faves and flops to see at one time.</p>
+        <p>Use the filters above to select specific Departments</p>
+        <p>With the controls below, specify the timespan to look at, and the number of top likers and top liked to see at one time.</p>
         <h4>Data</h4>
-        <p>Data provided by the <a href="http://www.informationisbeautifulawards.com/2012/01/challenge-of-the-stars/">informationisbeautifulawards.com</a> Hollywood Budgets visualization challenge</p>
+        <p>Data pulled from Data Export API and core API (points)</p>
         <h4>Visualization</h4>
         <p>Created Using <a href="http://mbostock.github.com/d3/">d3.js</a>. Best viewed in <a href="">Google Chrome</a> or <a href="">Safari</a></p>
       </div>
@@ -53,52 +53,54 @@
       </div>
     </div>
     <header>
-    <h1 id="title-top">How Much Do The Movies We Love Make?</h1>
+    <h1 id="title-top">Liking behavior in Brewspace</h1>
     </header>
     <div id="main" role="main">
       <div class="row">
         <div class="span8">
-          <select data-placeholder="Filter by Genre..." class="chzn-select" id="genre-select" multiple style="width:280px;" tabindex="4">
-            <option value=""></option> 
-            <option value="Action">Action</option> 
-            <option value="Adventure">Adventure</option> 
-            <option value="Animation">Animation</option> 
-            <option value="Biography">Biography</option> 
-            <option value="Comedy">Comedy</option> 
-            <option value="Crime">Crime</option> 
-            <option value="Documentary">Documentary</option> 
-            <option value="Drama">Drama</option> 
-            <option value="Horror">Horror</option> 
-            <option value="Mystery">Mystery</option> 
-            <option value="Romance">Romance</option> 
-            <option value="Thriller">Thriller</option> 
-          </select>
-        </div>
-        <div class="span5 offset3">
-          <select data-placeholder="Filter by Story Type..." class="chzn-select" id="story-select" multiple style="width:280px;" tabindex="4">
+          <select data-placeholder="Filter by Department..." class="chzn-select" id="genre-select" multiple style="width:280px;" tabindex="4">
             <option value=""></option>
-            <option value="Comedy">Comedy</option>
-            <option value="Discovery">Discovery</option>
-            <option value="Escape">Escape</option>
-            <option value="Fish Out Of Water">Fish Out Of Water</option>
-            <option value="Journey And Return">Journey And Return</option>
-            <option value="Love">Love</option>
-            <option value="Maturation">Maturation</option>
-            <option value="Metamorphosis">Metamorphosis</option>
-            <option value="Monster Force">Monster Force</option>
-            <option value="Pursuit">Pursuit</option>
-            <option value="Quest">Quest</option>
-            <option value="Rags To Riches">Rags To Riches</option>
-            <option value="Rescue">Rescue</option>
-            <option value="Revenge">Revenge</option>
-            <option value="Rivalry">Rivalry</option>
-            <option value="Sacrifice">Sacrifice</option>
-            <option value="Temptation">Temptation</option>
-            <option value="The Riddle">The Riddle</option>
-            <option value="Tragedy">Tragedy</option>
-            <option value="Transformation">Transformation</option>
-            <option value="Underdog">Underdog</option>
-            <option value="Wretched Excess">Wretched Excess</option>
+            <option value="Inside Sales - US">Inside Sales - US</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Support">Support</option>
+            <option value="Sales Engineers">Sales Engineers</option>
+            <option value="Finance">Finance</option>
+            <option value="Professional Services">Professional Services</option>
+            <option value="Field Sales - US East">Field Sales - US East</option>
+            <option value="Enterprise Solutions">Enterprise Solutions</option>
+            <option value="Sales Management">Sales Management</option>
+            <option value="Inside Sales">Inside Sales</option>
+            <option value="Product Management">Product Management</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Infrastructure Engineering">Infrastructure Engineering</option>
+            <option value="Strategy">Strategy</option>
+            <option value="Product Marketing">Product Marketing</option>
+            <option value="HR">HR</option>
+            <option value="Field Sales">Field Sales</option>
+            <option value="Facilities">Facilities</option>
+            <option value="Hosting">Hosting</option>
+            <option value="Sales Engineers - US">Sales Engineers - US</option>
+            <option value="Sales">Sales</option></option>
+            <option value="Corporate">Corporate</option>Alliances
+            <option value="IT">IT</option>
+            <option value="Legal">Legal</option>
+            <option value="Field Sales - US Central">Field Sales - US Central</option>
+            <option value="Sales - Inside Sales">Sales - Inside Sales</option>
+            <option value="None">None</option>
+            <option value="Services Management">Services Management</option>
+            <option value="Field Sales - Europe">Field Sales - Europe</option>
+            <option value="Sales - Telesales">Sales - Telesales</option>
+            <option value="Solution Enablement">Solution Enablement</option>
+            <option value="Sales: Field Sales - Europe">Sales: Field Sales - Europe</option>
+            <option value="General and Administrative">General and Administrative</option>
+            <option value="Field Sales - US West">Field Sales - US West</option>
+            <option value="Engineering Core">Engineering Core</option>
+            <option value="Education">Education</option>
+            <option value="Engineering Services">Engineering Services</option>
+            <option value="Sales Engineer">Sales Engineer</option>
+            <option value="Engineering Quality Assurance">Engineering Quality Assurance</option>
+            <option value="Business Development">Business Development</option>
+            <option value="Engineering Management">Engineering Management</option>
           </select>
         </div>
       </div>
@@ -110,14 +112,11 @@
       <div class="row">
         <div class="span5">
           <div id="years" class="control">
-            <h3>Year</h3>
+            <h3>Type</h3>
             <div class="control-links">
             <a id="all" class="active">All</a> | 
-            <a id="2011">2011</a> | 
-            <a id="2010">2010</a> | 
-            <a id="2009">2009</a> | 
-            <a id="2008">2008</a> | 
-            <a id="2007">2007</a>
+            <a id="givers">givers</a> | 
+            <a id="receivers">receivers</a>
           </div>
           </div>
         </div>
@@ -129,9 +128,10 @@
             <a id="top-5">5</a> | 
             <a id="top-15">15</a> | 
             <a id="top-25">25</a> | 
-            <a id="top-50" class="active">50</a>
+            <a id="top-50" class="active">50</a> |
+            <a id="top-100">100</a>
           </div>
-            <h3>Rated</h3>
+            <h3>Given</h3>
           </div>
         </div>
         <div class="span3">
@@ -142,59 +142,20 @@
               <a id="bottom-5">5</a> | 
               <a id="bottom-15">15</a> | 
               <a id="bottom-25">25</a> | 
-              <a id="bottom-50">50</a>
+              <a id="bottom-50">50</a> |
+              <a id="bottom-100">100</a>
             </div>
-            <h3>Rated</h3>
+            <h3>Given</h3>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="span4"><a id="key-link" href="javascript:void(0)">Key</a></div>
-        <div class="span4 offset8"><a id="story-link" href="javascript:void(0)">Stories</a></div>
       </div>
       <div class="row">
         <div class="span7">
           <div id="key" style="display:none;"></div>
           <p></p>
-        </div>
-        <div class="span9">
-          <div id="stories-section" style="display:none;">
-            <div id="stories"> 
-              <div id="story-list">
-                <ul>
-                  <li><a href="javascript:void(0)">Comedy</a></li>
-                  <li><a href="javascript:void(0)">Discovery</a></li>
-                  <li><a href="javascript:void(0)">Fish Out Of Water</a></li>
-                  <li><a href="javascript:void(0)">Journey And Return</a></li>
-                  <li><a href="javascript:void(0)">Love</a></li>
-                  <li><a href="javascript:void(0)">Escape</a></li>
-                  <li><a href="javascript:void(0)">Maturation</a></li>
-                  <li><a href="javascript:void(0)">Metamorphosis</a></li>
-                </ul>
-                <ul>
-                  <li><a href="javascript:void(0)">Pursuit</a></li>
-                  <li><a href="javascript:void(0)">Quest</a></li>
-                  <li><a href="javascript:void(0)">Monster Force</a></li>
-                  <li><a href="javascript:void(0)">Rags To Riches</a></li>
-                  <li><a href="javascript:void(0)">Rescue</a></li>
-                  <li><a href="javascript:void(0)">Revenge</a></li>
-                  <li><a href="javascript:void(0)">Rivalry</a></li>
-                  <li><a href="javascript:void(0)">Sacrifice</a></li>
-                </ul>
-                <ul>
-                  <li><a href="javascript:void(0)">Temptation</a></li>
-                  <li><a href="javascript:void(0)">The Riddle</a></li>
-                  <li><a href="javascript:void(0)">Tragedy</a></li>
-                  <li><a href="javascript:void(0)">Transformation</a></li>
-                  <li><a href="javascript:void(0)">Wretched Excess</a></li>
-                  <li><a href="javascript:void(0)">Underdog</a></li>
-                </ul>
-              </div>
-            </div>
-            <div id="story-detail">
-              <p></p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -204,13 +165,13 @@
         <div class="span6 offset1">
           <p></p>
           <div id="detail-love">
-            <h2>Most <span id="sub-title-love">Loved</span></h2>
+            <h2>Top <span id="sub-title-love">Givers</span></h2>
           </div>
         </div>
         <div class="span6 offset2">
           <p></p>
           <div id="detail-hate">
-              <h2>Most <span id="sub-title-hate">Hated</span></h2>
+              <h2>Top <span id="sub-title-hate">Receivers</span></h2>
             </div>
           </div>
         </div>
@@ -272,29 +233,7 @@
                 return false;
                 });
 
-            var stories = {"Comedy": "A series of complications leads the protagonist into ridiculous situations.",
-              "Discovery": "Through a major upheaval, the protagonist discovers a truth about themselves and a better understanding of life.",
-              "Fish Out Of Water": "The protagonist tries to cope in a completely different place / time / world.",
-              "Journey And Return": "The protagonist goes on a physical journey and returns changed.",
-              "Love": "A couple meet and overcome obstacles to discover true love. Or – tragically – don’t.",
-              "Escape": "The protagonist, trapped by antagonistic forces and must escape. Pronto.",
-              "Maturation": "The protagonist has an experience that matures them or starts a new stage of life, often adulthood.",
-              "Metamorphosis": "The protagonist literally changes into something else (i.e. a werewolf, hulk, giant cockroach).",
-              "Pursuit": "The protagonist has to chase somebody or something, usually in a hide-and-seek fashion.",
-              "Quest": "The protagonist searches for a person, place or thing, overcoming a number of challenges.",
-              "Monster Force": "A monster / alien / something scary and supernatural must be fought and overcome.",
-              "Rags To Riches": "The protagonist is poor, then rich.",
-              "Rescue": "The protagonist must save someone who is trapped physically or emotionally.",
-              "Revenge": "The protagonist retaliates against another for a real or imagined injury.",
-              "Rivalry": "The protagonist must triumph over a adversary to attain an object or goal.",
-              "Sacrifice": "The protagonist must make a difficult choice between pleasing themselves or a higher purpose (e.g. love, honour).",
-              "Temptation": "The protagonist has to make a moral choice between right and wrong.",
-              "The Riddle": "The protagonist has to solve a puzzle or a crime.",
-              "Tragedy": "The protagonist is brought down by a fatal flaw in their character or by forces out of their control.",
-              "Transformation": "The protagonist lives through a series of events that change them as a person.",
-              "Wretched Excess": "The protagonist pushes the limits of acceptable behaviour, destroying themselves in the process.",
-              "Underdog": "Total loser faces overwhelming odds but wins in the end."
-            };
+            var stories = {};
 
             $('#story-list a').mouseover(function() {
                 var key = $(this).text();

@@ -11,8 +11,8 @@ $ ->
 
   w = 860
   h = 450
-  key_h = 150
-  key_w = 400
+  key_h = 370
+  key_w = 900
   [key_pt, key_pr, key_pb, key_pl] = [10, 10, 10, 15]
   [pt, pr, pb, pl] = [20, 20, 50, 60]
 
@@ -52,7 +52,10 @@ $ ->
       b2 - b1
 
   filter_year = (year) ->
-    data = data.filter (d) -> if year == "all" then true else d.year == year
+    if year == "givers"
+      data = data.filter (d) -> if year == "all" then true else d[data_key["rating"]]/d[data_key["gross"]] > 1
+    else
+      data = data.filter (d) -> if year == "all" then true else d[data_key["rating"]]/d[data_key["gross"]] < 1
 
   filter_genres = (genres) =>
     if genres
@@ -87,7 +90,7 @@ $ ->
     min_y = min_y - y_padding
     min_y = if min_y < 0 then 0 else min_y
     max_y = max_y + y_padding
-    max_y = if max_y > 100 then 100 else max_y
+    #max_y = if max_y > 100 then 100 else max_y
     
     x_padding = parseInt(Math.abs(max_x - min_x) / 12)
     x_padding = if x_padding > min_x_padding then x_padding else min_x_padding
@@ -122,7 +125,7 @@ $ ->
       .attr("fill", (d) -> color(d["Genre"]))
       .attr("stroke", (d) -> d3.hsl(color(d["Genre"])).darker())
       .attr("stroke-width", 2)
-      .attr("r", (d) -> r_scale(parseFloat(d["Budget"])))
+      .attr("r", (d) -> r_scale(parseFloat(d["Budget"])/100))
 
     movies.transition()
       .duration(1000)
@@ -213,7 +216,7 @@ $ ->
       .data(d3.keys(genres))
       .enter().append("g")
         .attr("class", "key-group")
-        .attr("transform", (d,i) -> "translate(#{if i*25 >= key_h then 140 else 0},#{i*25 % key_h})")
+        .attr("transform", (d,i) -> "translate(#{200*parseInt(i*25/key_h)},#{i*25 % key_h})")
 
     key_group.append("circle")
         .attr("r", key_r)
@@ -229,7 +232,7 @@ $ ->
     key_demo_group = key.append("g")
       .attr("transform", "translate(#{0},0)")
 
-    example_x = 280
+    example_x = 630
     example_r = 20
     example_y = key_h / 2 - example_r
 
@@ -252,12 +255,12 @@ $ ->
     key_demo_group.append("text")
       .attr("dx", example_x + (example_r * 2) + 4 )
       .attr("dy", example_y + example_r - 8)
-      .text("Film's")
+      .text("user")
 
     key_demo_group.append("text")
       .attr("dx", example_x + (example_r * 2) + 4 )
       .attr("dy", example_y + example_r + 6)
-      .text("Budget")
+      .text("points")
 
   render_vis = (csv) ->
     all_data = pre_filter(csv)
@@ -287,7 +290,7 @@ $ ->
       .attr("text-anchor", "middle")
       .attr("class", "axisTitle")
       .attr("transform", "translate(#{pl},0)")
-      .text("Profit ($ mil)")
+      .text("Liked Count")
 
     base_vis.append("g")
       .attr("class", "y_axis")
@@ -304,7 +307,7 @@ $ ->
       .attr("text-anchor", "middle")
       .attr("class", "axisTitle")
       .attr("transform", "rotate(270)scale(-1,1)translate(#{pb},#{0})")
-      .text("Rating (Rotten Tomatoes %)")
+      .text("Like Count")
    
     body = vis.append("g")
       .attr("transform", "translate(#{pl},#{pb})")
@@ -341,18 +344,17 @@ $ ->
 
     bBox = element.getBBox()
     box = { "height": Math.round(bBox.height), "width": Math.round(bBox.width), "x": w + bBox.x, "y" : h + bBox.y}
-    box.x = Math.round(x_scale(movie_data["Profit"]))  - (pr+110) + r_scale(movie_data["Budget"])
-    box.y = Math.round(y_scale_reverse(movie_data["Rotten Tomatoes"])) - (r_scale(movie_data["Budget"]) + pt + -75)
+    box.x = Math.round(x_scale(movie_data["Profit"]))  - (pr+110) + r_scale(movie_data["Budget"]/100)
+    box.y = Math.round(y_scale_reverse(movie_data["Rotten Tomatoes"])) - (r_scale(movie_data["Budget"]/100) + pt + -150)
 
     tooltipWidth = parseInt(d3.select('#tooltip').style('width').split('px').join(''))
 
     msg = '<p class="title">' + movie_data["Film"] + '</p>'
     msg += '<table>'
-    msg += '<tr><td>Rating:</td><td>' +  movie_data["Rotten Tomatoes"] + '%</td></tr>'
-    msg += '<tr><td>Budget:</td><td>' +  movie_data["Budget"] + ' mil</td></tr>'
-    msg += '<tr><td>Worldwide Gross:</td><td>' +  movie_data["Worldwide Gross"] + ' mil</td></tr>'
-    msg += '<tr><td>Profit:</td><td>' +  movie_data["Profit"] + ' mil' + '</td></tr>'
-    msg += '<tr><td>Story:</td><td>' +  movie_data["Story"] + '</td></tr>'
+    msg += '<tr><td>Points:</td><td>' +  movie_data["Budget"] + '</td></tr>'
+    msg += '<tr><td>Likes Given Count:</td><td>' +  movie_data["Rotten Tomatoes"] + '</td></tr>'
+    msg += '<tr><td>Likes Received Count:</td><td>' +  movie_data["Worldwide Gross"] + '</td></tr>'
+    msg += '<tr><td>Department:</td><td>' +  movie_data["Story"] + '</td></tr>'
     msg += '</table>'
 
     d3.select('#tooltip').classed('hidden', false)
@@ -375,7 +377,7 @@ $ ->
     crosshairs_g.append("line")
       .attr("class", "crosshair")
       .attr("x1", 0)
-      .attr("x2", x_scale(movie_data["Profit"]) - r_scale(movie_data["Budget"]))
+      .attr("x2", x_scale(movie_data["Profit"]) - r_scale(movie_data["Budget"]/100))
       .attr("y1", y_scale(movie_data["Rotten Tomatoes"]))
       .attr("y2", y_scale(movie_data["Rotten Tomatoes"]))
       .attr("stroke-width", 1)
@@ -385,7 +387,7 @@ $ ->
       .attr("x1", x_scale(movie_data["Profit"]))
       .attr("x2", x_scale(movie_data["Profit"]))
       .attr("y1", 0)
-      .attr("y2", y_scale(movie_data["Rotten Tomatoes"]) - r_scale(movie_data["Budget"]))
+      .attr("y2", y_scale(movie_data["Rotten Tomatoes"]) - r_scale(movie_data["Budget"]/100))
       .attr("stroke-width", 1)
 
   hide_details = (movie_data) ->
@@ -397,7 +399,7 @@ $ ->
     body.select("#crosshairs").remove()
       
 
-  d3.csv "data/movies_all.csv", render_vis
+  d3.csv "data/likesbymonth.csv", render_vis
 
   update = () =>
     update_data()
