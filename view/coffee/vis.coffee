@@ -16,7 +16,7 @@ $ ->
   [key_pt, key_pr, key_pb, key_pl] = [10, 10, 10, 15]
   [pt, pr, pb, pl] = [20, 20, 50, 60]
 
-  root.options = {top: 50, bottom: 0, genres: null, year: "all", stories: null, sort:"rating"}
+  root.options = {top: 10, bottom: 0, genres: null, year: "all", stories: null, sort:"rating"}
 
   data = null
   all_data = null
@@ -47,8 +47,8 @@ $ ->
 
   sort_data = (sort_type) =>
     data = data.sort (a,b) ->
-      b1 = parseFloat(a[data_key[sort_type]]) ? 0
-      b2 = parseFloat(b[data_key[sort_type]]) ? 0
+      b1 = parseInt(a[data_key[sort_type]]) ? 0
+      b2 = parseInt(b[data_key[sort_type]]) ? 0
       b2 - b1
 
   filter_year = (year) ->
@@ -77,10 +77,10 @@ $ ->
     min_y_padding = 3
     min_x_padding = 5
 
-    [min_x, max_x] = d3.extent data, (d) -> parseFloat(d["Profit"])
+    [min_x, max_x] = d3.extent data, (d) -> parseInt(d["Profit"])
     min_x = if min_x > 0 then 0 else min_x
 
-    [min_y, max_y] = d3.extent data, (d) -> parseFloat(d[data_key["rating"]])
+    [min_y, max_y] = d3.extent data, (d) -> parseInt(d[data_key["rating"]])
     y_padding = parseInt(Math.abs(max_y - min_y) / 5)
     y_padding = if y_padding > min_y_padding then y_padding else min_y_padding
 
@@ -102,11 +102,11 @@ $ ->
 
   update_data = () =>
     data = all_data
-    filter_year(root.options.year)
+#    filter_year(root.options.year)
     filter_genres(root.options.genres)
     filter_stories(root.options.stories)
-    sort_data(root.options.sort)
-    filter_number(root.options.top, root.options.bottom)
+#    sort_data(root.options.sort)
+#    filter_number(root.options.top, root.options.bottom)
     update_scales()
 
   draw_movies = () ->
@@ -122,25 +122,25 @@ $ ->
       .attr("fill", (d) -> color(d["Genre"]))
       .attr("stroke", (d) -> d3.hsl(color(d["Genre"])).darker())
       .attr("stroke-width", 2)
-      .attr("r", (d) -> r_scale(parseFloat(d["Budget"])))
+      .attr("r", (d) -> r_scale(parseInt(d["Budget"])))
 
-    movies.transition()
-      .duration(1000)
-      .attr("transform", (d) -> "translate(#{x_scale(d["Profit"])},#{y_scale(d["Rotten Tomatoes"])})")
+    # movies.transition()
+    #   .duration(1000)
+    #   .attr("transform", (d) -> "translate(#{x_scale(parseInt(d["Profit"])},#{y_scale(parseInt(d["Rotten Tomatoes"])})")
 
     base_vis.transition()
       .duration(1000)
       .select(".x_axis").call(xAxis)
 
-    zero_line.transition()
-      .duration(1000)
-      .attr("x1", x_scale(0))
-      .attr("x2", x_scale(0))
+    # zero_line.transition()
+    #   .duration(1000)
+    #   .attr("x1", x_scale(0))
+    #   .attr("x2", x_scale(0))
 
-    middle_line.transition()
-      .duration(1000)
-      .attr("y1", y_scale(50.0))
-      .attr("y2", y_scale(50.0))
+    # middle_line.transition()
+    #   .duration(1000)
+    #   .attr("y1", y_scale(50.0))
+    #   .attr("y2", y_scale(50.0))
 
     base_vis.transition()
       .duration(1000)
@@ -160,7 +160,7 @@ $ ->
       .attr("class", "movie-detail")
       .attr("id", (d) -> "movie-detail-#{d.id}")
     .append("h3")
-      .text((d) -> d["Film"])
+      .text((d) -> d["name"])
 
     detail_div.exit().remove()
  
@@ -175,14 +175,14 @@ $ ->
     else
       $("#detail-hate").show()
 
-    top_data = data[0...root.options.top]
+    top_data = data
 
     detail_top = d3.select("#detail-love").selectAll(".movie-detail")
       .data(top_data, (d) -> d.id)
 
     draw_movie_details(detail_top)
 
-    bottom_data = data[root.options.top..-1].reverse()
+    bottom_data = data
 
     detail_bottom = d3.select("#detail-hate").selectAll(".movie-detail")
       .data(bottom_data, (d) -> d.id)
@@ -191,7 +191,7 @@ $ ->
 
   render_key = () ->
     genres = {}
-    all_data.forEach (d) -> genres[d["Genre"]] = 1
+    d3.entries(all_data).forEach (d) -> genres[d["Genre"]] = 1
     key_r = 10
 
     key = d3.select("#key")
@@ -240,14 +240,14 @@ $ ->
       .attr("cx", example_x)
       .attr("cy", example_y)
 
-    key_demo_group.append("line")
-      .attr("x1", example_x)
-      .attr("x2", example_x + example_r * 2)
-      .attr("y1", example_y + example_r)
-      .attr("y2", example_y + example_r)
-      .attr("stroke", "#333")
-      .attr("stroke-dasharray", "3")
-      .attr("stroke-width", 2)
+    # key_demo_group.append("line")
+    #   .attr("x1", example_x)
+    #   .attr("x2", example_x + example_r * 2)
+    #   .attr("y1", example_y + example_r)
+    #   .attr("y2", example_y + example_r)
+    #   .attr("stroke", "#333")
+    #   .attr("stroke-dasharray", "3")
+    #   .attr("stroke-width", 2)
 
     key_demo_group.append("text")
       .attr("dx", example_x + (example_r * 2) + 4 )
@@ -259,8 +259,8 @@ $ ->
       .attr("dy", example_y + example_r + 6)
       .text("Budget")
 
-  render_vis = (csv) ->
-    all_data = pre_filter(csv)
+  render_vis = (json) ->
+    all_data = json
     update_data()
 
     base_vis = d3.select("#vis")
@@ -268,13 +268,6 @@ $ ->
       .attr("width", w + (pl + pr) )
       .attr("height", h + (pt + pb) )
       .attr("id", "vis-svg")
-
-    # base_vis.append("rect")
-    #   .attr("width", w + (pl + pr) )
-    #   .attr("height", h + (pt + pb) )
-    #   .attr("fill", "#ffffff")
-    #   .attr("opacity", 0.0)
-    #   .attr("pointer-events","all")
 
     base_vis.append("g")
       .attr("class", "x_axis")
@@ -310,23 +303,23 @@ $ ->
       .attr("transform", "translate(#{pl},#{pb})")
       .attr("id", "vis-body")
 
-    zero_line = body.append("line")
-      .attr("x1", x_scale(0))
-      .attr("x2", x_scale(0))
-      .attr("y1", 0 + 5)
-      .attr("y2", h - 5)
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "2")
+    # zero_line = body.append("line")
+    #   .attr("x1", x_scale(0))
+    #   .attr("x2", x_scale(0))
+    #   .attr("y1", 0 + 5)
+    #   .attr("y2", h - 5)
+    #   .attr("stroke", "#aaa")
+    #   .attr("stroke-width", 1)
+    #   .attr("stroke-dasharray", "2")
 
-    middle_line = body.append("line")
-      .attr("x1", 0 + 5)
-      .attr("x2", w + 5)
-      .attr("y1", y_scale(50.0))
-      .attr("y2", y_scale(50.0))
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "2")
+    # middle_line = body.append("line")
+    #   .attr("x1", 0 + 5)
+    #   .attr("x2", w + 5)
+    #   .attr("y1", y_scale(50.0))
+    #   .attr("y2", y_scale(50.0))
+    #   .attr("stroke", "#aaa")
+    #   .attr("stroke-width", 1)
+    #   .attr("stroke-dasharray", "2")
  
 
     movie_body = body.append("g")
@@ -341,12 +334,12 @@ $ ->
 
     bBox = element.getBBox()
     box = { "height": Math.round(bBox.height), "width": Math.round(bBox.width), "x": w + bBox.x, "y" : h + bBox.y}
-    box.x = Math.round(x_scale(movie_data["Profit"]))  - (pr+110) + r_scale(movie_data["Budget"])
-    box.y = Math.round(y_scale_reverse(movie_data["Rotten Tomatoes"])) - (r_scale(movie_data["Budget"]) + pt + -75)
+    box.x = Math.round(x_scale(parseInt(movie_data["Profit"]))  - (pr+110) + r_scale(parseInt(movie_data["Budget"])))
+    box.y = Math.round(y_scale_reverse(parseInt(movie_data["Rotten Tomatoes"])) - (r_scale(parseInt(movie_data["Budget"]) + pt + -75)))
 
     tooltipWidth = parseInt(d3.select('#tooltip').style('width').split('px').join(''))
 
-    msg = '<p class="title">' + movie_data["Film"] + '</p>'
+    msg = '<p class="title">' + movie_data["name"] + '</p>'
     msg += '<table>'
     msg += '<tr><td>Rating:</td><td>' +  movie_data["Rotten Tomatoes"] + '%</td></tr>'
     msg += '<tr><td>Budget:</td><td>' +  movie_data["Budget"] + ' mil</td></tr>'
@@ -372,21 +365,21 @@ $ ->
     crosshairs_g = body.insert("g", "#movies")
       .attr("id", "crosshairs")
 
-    crosshairs_g.append("line")
-      .attr("class", "crosshair")
-      .attr("x1", 0)
-      .attr("x2", x_scale(movie_data["Profit"]) - r_scale(movie_data["Budget"]))
-      .attr("y1", y_scale(movie_data["Rotten Tomatoes"]))
-      .attr("y2", y_scale(movie_data["Rotten Tomatoes"]))
-      .attr("stroke-width", 1)
+    # crosshairs_g.append("line")
+    #   .attr("class", "crosshair")
+    #   .attr("x1", 0)
+    #   .attr("x2", x_scale(parseInt(movie_data["Profit"])) - r_scale(parseInt(movie_data["Budget"])))
+    #   .attr("y1", y_scale(parseInt(movie_data["Rotten Tomatoes"])))
+    #   .attr("y2", y_scale(parseInt(movie_data["Rotten Tomatoes"])))
+    #   .attr("stroke-width", 1)
 
-    crosshairs_g.append("line")
-      .attr("class", "crosshair")
-      .attr("x1", x_scale(movie_data["Profit"]))
-      .attr("x2", x_scale(movie_data["Profit"]))
-      .attr("y1", 0)
-      .attr("y2", y_scale(movie_data["Rotten Tomatoes"]) - r_scale(movie_data["Budget"]))
-      .attr("stroke-width", 1)
+    # crosshairs_g.append("line")
+    #   .attr("class", "crosshair")
+    #   .attr("x1", x_scale(parseInt(movie_data["Profit"])))
+    #   .attr("x2", x_scale(parseInt(movie_data["Profit"])))
+    #   .attr("y1", 0)
+    #   .attr("y2", y_scale(parseInt(movie_data["Rotten Tomatoes"])) - r_scale(parseInt(movie_data["Budget"])))
+    #   .attr("stroke-width", 1)
 
   hide_details = (movie_data) ->
     d3.select('#tooltip').classed('hidden', true)
@@ -397,7 +390,7 @@ $ ->
     body.select("#crosshairs").remove()
       
 
-  d3.csv "data/movies_all.csv", render_vis
+  d3.json "data/likes.json", render_vis
 
   update = () =>
     update_data()
